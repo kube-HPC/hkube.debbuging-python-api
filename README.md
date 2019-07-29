@@ -14,6 +14,8 @@ curl -Lo hkubectl https://github.com/kube-HPC/hkubectl/releases/download/$(curl 
 ```
 -  run ``hkubectl dry-run start``
 
+- run `pip install hkube.debbuging-python-api`
+
 ## usage 
 
 ```python 
