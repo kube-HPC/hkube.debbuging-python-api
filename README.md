@@ -20,7 +20,7 @@ curl -Lo hkubectl https://github.com/kube-HPC/hkubectl/releases/download/$(curl 
 
 ```python 
 import asyncio
-from lib.builder import Builder
+from hkube_debbuging_python_api.builder import Builder
 
 
 def test1(data):
@@ -39,4 +39,5 @@ class runBuilder():
 
 bla = asyncio.run(runBuilder.run())
 print('finish')
+
 ```
