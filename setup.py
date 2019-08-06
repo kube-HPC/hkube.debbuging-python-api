@@ -17,7 +17,7 @@ with open("README.md", "r") as f:
     long_description = f.read()
 
 about = {}
-with open(os.path.join(here, 'lib', '__version__.py'), 'r') as f:
+with open(os.path.join(here, 'hkube_debbuging_python_api', '__version__.py'), 'r') as f:
     exec(f.read(), about)
 
 setuptools.setup(

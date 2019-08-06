@@ -1,22 +1,25 @@
-# HKUBE local python api 
+# HKUBE local python api
 
-api implementation for running  and debbuging hkubes pipeline without installing hkube 
+api implementation for running and debugging Hkube`s pipeline without installing Hkube
 
-## prerequisite 
+## prerequisite
 
- - install hkubectl 
-  ```bash
+- install hkubectl
+
+```bash
 # Check release page for latest version
 os = "linux/macos/windows"
 curl -Lo hkubectl https://github.com/kube-HPC/hkubectl/releases/download/$(curl -s https://api.github.com/repos/kube-HPC/hkubectl/releases/latest | grep -oP '"tag_name": "\K(.*)(?=")')/hkubectl-{linux/macos/windows} \
 && chmod +x hkubectl \
 && sudo mv hkubectl /usr/local/bin/
+
 ```
--  run ``hkubectl dry-run start``
 
-## usage 
+- run `hkubectl dry-run start`
 
-```python 
+## usage
+
+```python
 import asyncio
 from lib.builder import Builder
 
@@ -28,13 +31,16 @@ def test1(data):
 
 class runBuilder():
 
-    async def run():
+  async def run():
         build = Builder()
         pipe = await build.createPipeline("test")
         pipe.algorithm("test").input(5).add(test1).algorithm(
-            'test2').input("@test").add(test1).execute()
+            'test2').input("@test").input(8).add(test1).algorithm("test5").input("@test2").add(test2).flowInput().input({"david": 5}).add().execute()
+
+
 
 
 bla = asyncio.run(runBuilder.run())
 print('finish')
+
 ```
