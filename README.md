@@ -15,13 +15,13 @@ curl -Lo hkubectl https://github.com/kube-HPC/hkubectl/releases/download/$(curl 
 
 ```
 
-- run `hkubectl dry-run start`
+- run `pip install hkube.debbuging-python-api`
 
 ## usage
 
 ```python
 import asyncio
-from lib.builder import Builder
+from hkube_debbuging_python_api.builder import Builder
 
 
 def test1(data):
