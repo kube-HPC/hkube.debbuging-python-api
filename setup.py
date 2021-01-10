@@ -7,6 +7,7 @@ here = os.path.abspath(os.path.dirname(__file__))
 
 packages = setuptools.find_packages()
 
+VERSION = '0.0.4'
 requires = [
     'Events>=0.3',
     'websocket-client>=0.54.0',
@@ -22,7 +23,7 @@ with open(os.path.join(here, 'hkube_debbuging_python_api', '__version__.py'), 'r
 
 setuptools.setup(
     name=about['__title__'],
-    version=about['__version__'],
+    version=VERSION,
     author=about['__author__'],
     author_email=about['__author_email__'],
     description=about['__description__'],
