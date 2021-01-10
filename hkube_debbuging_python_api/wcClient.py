@@ -14,7 +14,8 @@ class WebsocketClient:
         self._active = True
         self._switcher = {
             "RUN_ALGORTIHM": self.runAlgorithm,
-            "PIPELINE_CREATED": self.pipelineExecute
+            "PIPELINE_CREATED": self.pipelineExecute,
+            "PIPELINE_FINISHED": self.pipelineDone,
         }
         self.algorithm = Algorithm()
         self.pipeline = Pipeline()
@@ -27,7 +28,7 @@ class WebsocketClient:
     def runAlgorithm(self, data):
         result = None
         try:
-            result = self.algorithm.registerAlgorithm(data['algorithmName'], data)
+            result = self.algorithm.runAlgorithm(data['algorithmName'], data)
 
            # res = result == None if {} else result
             self.send("ALGORTIHM_FINISHED_SUCCESS", {
@@ -39,8 +40,12 @@ class WebsocketClient:
     def pipelineCreate(self, data):
         self.send("PIPELINE_CREATE", data)
 
-    def pipelineExecute(self):
+    def pipelineExecute(self,_):
         self.send("PIPELINE_EXECUTE", {})
+
+    def pipelineDone(self, data):
+        print('pipelineDone', data)
+        self.stopWS()
 
     def stop(self, data):
         self.events.on_stop(data)
@@ -51,8 +56,10 @@ class WebsocketClient:
     def on_message(self, message):
         decoded = json.loads(message)
         command = decoded["type"]
-   #     print(f'got message from worker: {command}')
+        print(f'got message from worker: {command}')
         func = self._switcher.get(command)
+        if not func:
+            return
         data = decoded.get("data", None)
         func(data)
 
@@ -79,9 +86,13 @@ class WebsocketClient:
         while self._active:
             try:
                 self._ws.run_forever()
+                if not self._active:
+                    break
                 time.sleep(self._reconnectInterval)
             except Exception:
                 pass
 
     def stopWS(self):
         self._active = False
+        if self._ws:
+            self._ws.close()

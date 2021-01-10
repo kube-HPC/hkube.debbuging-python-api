@@ -20,8 +20,10 @@ class Algorithm(metaclass=Singleton):
         self.instance = {"nodeName": name, "input": [], "algorithmName": name}
         return self
 
-    def registerAlgorithm(self, algorithm_name, algorithm):
-        self._registerAlgorithm[algorithm_name] = algorithm
+    def runAlgorithm(self, algorithm_name, data):
+        func = self._registerAlgorithm[algorithm_name]
+        if func:
+            func(data)
 
     def input(self, data):
         self.instance['input'].append(data)
