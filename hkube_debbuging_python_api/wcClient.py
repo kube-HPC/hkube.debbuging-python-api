@@ -33,7 +33,7 @@ class WebsocketClient:
            # res = result == None if {} else result
             self.send("ALGORTIHM_FINISHED_SUCCESS", {
                       "data": data, "result": result or {}})
-        except Exception:
+        except Exception as ex:
             self.send("ALGORTIHM_FINISHED_FAILED", {
                       "data": data, "result": result or {}})
 
@@ -45,6 +45,7 @@ class WebsocketClient:
 
     def pipelineDone(self, data):
         print('pipelineDone', data)
+        self.pipeline.done(data)
         self.stopWS()
 
     def stop(self, data):

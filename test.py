@@ -21,9 +21,9 @@ class runBuilder():
         pipe.algorithm("test").input(5).add(test1)\
         .algorithm('test1').input("@test").input(8).add(test1)\
         .algorithm("test2").input("@test1").add(test2)\
-        .flowInput().input({"david": 5}).add()\
-        .execute()
+        .flowInput().input({"david": 5}).add()
+        return await pipe.execute()
 
 
 bla = asyncio.run(runBuilder.run())
-print('finish')
+print('finish', bla)
