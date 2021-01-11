@@ -18,7 +18,7 @@ jobs:
     name: Python ${{ matrix.python-version }}
     strategy:
       matrix:
-        python-version: ["3.5", "3.6", "3.7", "3.8"]
+        python-version: ["3.7", "3.8"]
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
       - uses: actions/checkout@v2
@@ -27,7 +27,7 @@ jobs:
         with:
           python-version: ${{ matrix.python-version }}
           architecture: x64
-      - run: ./tools/ci/tests.sh
+      - run: ./scripts/test.sh
   coverage:
     if: "!contains(github.event.head_commit.message, '[skip ci]')"
     runs-on: ubuntu-latest

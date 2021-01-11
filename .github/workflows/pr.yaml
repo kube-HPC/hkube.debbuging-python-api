@@ -28,6 +28,10 @@ jobs:
           python-version: ${{ matrix.python-version }}
           architecture: x64
       - run: ./scripts/test.sh
+      - name: Coveralls
+        uses: coverallsapp/github-action@v1.1.2
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
   # coverage:
   #   runs-on: ubuntu-latest
   #   steps:
