@@ -7,4 +7,4 @@ python setup.py bdist_wheel
 pip install $PWD/dist/*
 
 pylint hkube_debbuging_python_api
-pytest --cov=. --cov-report html tests/
+pytest tests/
