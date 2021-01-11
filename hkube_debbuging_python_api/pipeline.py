@@ -18,7 +18,6 @@ class Pipeline(metaclass=Singleton):
         self.loop = None
         self.future = None
 
-
     def init(self, name):
         self.event = Events()
         self.pipeline = {

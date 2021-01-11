@@ -27,3 +27,14 @@ def test_run():
     res = asyncio.run(runBuilder.run())
     assert len(res) == 1
     assert res[0]['nodeName'] == 'test2'
+
+# def test_pipeline():
+#     class runBuilder():
+#         async def run():
+#             build = Builder()
+#             pipe = await build.createPipeline("test")
+#             pipe.algorithm("test").input(5).add(test1)
+#             return pipe
+#     pipe = asyncio.run(runBuilder.run())
+#     assert pipe
+    

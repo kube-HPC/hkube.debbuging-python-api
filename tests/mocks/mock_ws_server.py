@@ -67,7 +67,7 @@ class WebSocketServerClass:
 
     def handleDisconnected(self, client, server):
         # print('ws disconnected')
-        self.close()
+        # self.close()
         pass
 
     def sendMsgToClient(self, client, data):
