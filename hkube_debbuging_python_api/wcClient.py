@@ -33,7 +33,7 @@ class WebsocketClient:
            # res = result == None if {} else result
             self.send("ALGORTIHM_FINISHED_SUCCESS", {
                       "data": data, "result": result or {}})
-        except Exception as ex:
+        except Exception:
             self.send("ALGORTIHM_FINISHED_FAILED", {
                       "data": data, "result": result or {}})
 
