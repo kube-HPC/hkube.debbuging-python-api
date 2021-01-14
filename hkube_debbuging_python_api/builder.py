@@ -16,8 +16,8 @@ class Builder():
         self.future = self.loop.create_future()
         self.ws = WebsocketClient()
         self.ws.events.on_connection += self.onConnect
-        t = threading.Thread(target=self.ws.startWS,
-                             args=("ws://localhost:3060",))
+        # TODO: move ws connect string to config/params
+        t = threading.Thread(target=self.ws.startWS, args=("ws://localhost:3060",))
         t.start()
         return self.future
 
@@ -30,11 +30,3 @@ class Builder():
         if not self.wsReady :
             await self.config()
             return Pipeline().init(name)
-
-    # async def createPipeline1(self, name):
-    #         if self.wsReady == False:
-    #             await self.config()
-    #             print('im here')
-    #             return pipeline._init(name)
-    # async def createPipeline:
-    #     await

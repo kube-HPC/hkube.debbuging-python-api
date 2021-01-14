@@ -1,9 +1,9 @@
 from hkube_debbuging_python_api.singleton import Singleton
+from hkube_debbuging_python_api.consts import fields
 
-
+# TODO: remove singleton
 class FlowInput(metaclass=Singleton):
     def __init__(self):
-        self.ws = None
         self._pipelineInstance = None
         self.instance = {}
 
@@ -24,5 +24,5 @@ class FlowInput(metaclass=Singleton):
         return self
 
     def add(self):
-        self._pipelineInstance.pipeline['flowInput'] = self.instance
+        self._pipelineInstance.pipeline[fields.flowInput] = self.instance
         return self._pipelineInstance

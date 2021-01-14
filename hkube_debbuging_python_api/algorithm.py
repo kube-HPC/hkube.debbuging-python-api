@@ -4,7 +4,6 @@ from hkube_debbuging_python_api.singleton import Singleton
 
 class Algorithm(metaclass=Singleton):
     def __init__(self):
-        self.ws = None
         self.events = Events()
         self._pipelineInstance = None
         self._registerAlgorithm = {}

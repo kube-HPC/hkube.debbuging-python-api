@@ -2,6 +2,7 @@ import websocket
 import simplejson as json
 from hkube_debbuging_python_api.algorithm import Algorithm
 from hkube_debbuging_python_api.pipeline import Pipeline
+from hkube_debbuging_python_api.consts import messages
 from events import Events
 import time
 
@@ -13,9 +14,9 @@ class WebsocketClient:
         self._reconnectInterval = 5
         self._active = True
         self._switcher = {
-            "RUN_ALGORTIHM": self.runAlgorithm,
-            "PIPELINE_CREATED": self.pipelineExecute,
-            "PIPELINE_FINISHED": self.pipelineDone,
+            messages.RUN_ALGORTIHM: self.runAlgorithm,
+            messages.PIPELINE_CREATED: self.pipelineExecute,
+            messages.PIPELINE_FINISHED: self.pipelineDone,
         }
         self.algorithm = Algorithm()
         self.pipeline = Pipeline()
@@ -23,7 +24,7 @@ class WebsocketClient:
         self.pipeline.events.emit_pipeline_create += self.pipelineCreate
 
     def algorithmRegister(self, data):
-        self.send('ALGORITHM_REGISTER', {"name": data["name"]})
+        self.send(messages.ALGORITHM_REGISTER, {"name": data["name"]})
 
     def runAlgorithm(self, data):
         result = None
@@ -31,17 +32,17 @@ class WebsocketClient:
             result = self.algorithm.runAlgorithm(data['algorithmName'], data)
 
            # res = result == None if {} else result
-            self.send("ALGORTIHM_FINISHED_SUCCESS", {
+            self.send(messages.ALGORTIHM_FINISHED_SUCCESS, {
                       "data": data, "result": result or {}})
         except Exception:
-            self.send("ALGORTIHM_FINISHED_FAILED", {
+            self.send(messages.ALGORTIHM_FINISHED_FAILED, {
                       "data": data, "result": result or {}})
 
     def pipelineCreate(self, data):
-        self.send("PIPELINE_CREATE", data)
+        self.send(messages.PIPELINE_CREATE, data)
 
     def pipelineExecute(self,_):
-        self.send("PIPELINE_EXECUTE", {})
+        self.send(messages.PIPELINE_EXECUTE, {})
 
     def pipelineDone(self, data):
         print('pipelineDone', data)

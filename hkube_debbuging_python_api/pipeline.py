@@ -1,6 +1,7 @@
 from hkube_debbuging_python_api.algorithm import Algorithm
 from hkube_debbuging_python_api.flow_input import FlowInput
 from hkube_debbuging_python_api.singleton import Singleton
+from hkube_debbuging_python_api.consts import fields
 from events import Events
 import asyncio
 
@@ -9,11 +10,7 @@ class Pipeline(metaclass=Singleton):
     def __init__(self):
         self.ws = None
         self.events = Events()
-        self.pipeline = {
-            "name": '',
-            "nodes": [],
-            "flowInput": []
-        }
+        self.pipeline = None
         self.event = None
         self.loop = None
         self.future = None
@@ -36,7 +33,7 @@ class Pipeline(metaclass=Singleton):
         return FlowInput().init(self)
 
     def execute(self):
-        self.events.emit_pipeline_create({"pipeline": self.pipeline})
+        self.events.emit_pipeline_create({fields.pipeline: self.pipeline})
         return self.future
 
     def done(self, data):
