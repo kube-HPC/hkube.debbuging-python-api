@@ -1,0 +1,8 @@
+__title__ = 'hkube.debbuging-python-api'
+__description__ = 'Hkube Python Api'
+__url__ = 'https://github.com/kube-HPC/hkube.debbuging-python-api'
+__version__ = '0.0.4'
+__author__ = 'Maty Zisserman'
+__author_email__ = 'hkube.dev@gmail.com'
+__license__ = 'MIT'
+__copyright__ = 'Copyright 2019 Hkube'
