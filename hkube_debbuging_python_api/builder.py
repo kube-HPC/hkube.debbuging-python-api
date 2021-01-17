@@ -1,7 +1,7 @@
 import asyncio
 from hkube_debbuging_python_api.pipeline import Pipeline
-import threading
 from hkube_debbuging_python_api.wcClient import WebsocketClient
+import threading
 
 
 class Builder():
@@ -24,7 +24,6 @@ class Builder():
     def onConnect(self):
         self.wsReady = True
         self.loop.call_soon_threadsafe(self.future.set_result, 4)
-        # self.future.set_result(50)
 
     async def createPipeline(self, name):
         if not self.wsReady :

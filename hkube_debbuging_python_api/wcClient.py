@@ -13,7 +13,6 @@ class WebsocketClient(Communication):
         self._reconnectInterval = 5
         self._active = True
         self._switcher = {
-            # messages.RUN_ALGORTIHM: self.runAlgorithm,
             messages.RUN_ALGORTIHM: self._events.on_run_algorithm,
             messages.PIPELINE_CREATED: self.pipelineExecute,
             messages.PIPELINE_FINISHED: self.pipelineDone,
@@ -36,7 +35,6 @@ class WebsocketClient(Communication):
         self.send(messages.PIPELINE_EXECUTE, {})
 
     def pipelineDone(self, data):
-        print('pipelineDone', data)
         self._events.on_pipeline_done(data)
         self.stopWS()
 
@@ -66,7 +64,6 @@ class WebsocketClient(Communication):
         self._events.on_connection()
 
     def send(self, type, message):
-      #      print(f'sending message to worker: {type}')
         self._ws.send(json.dumps({"type": type, "data": message}))
 
     def startWS(self, url):
