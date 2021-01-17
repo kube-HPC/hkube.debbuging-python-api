@@ -15,7 +15,7 @@ class WebSocketServerClass:
         }
         def nextAlgo(client):
             if (algos['current']>=len(algos['order'])):
-                self.sendMsgToClient(client, {'type': 'PIPELINE_FINISHED', 'data': [{'nodeName': 'test2', 'algorithmName': 'test2', 'result': {'foo': 2}}]})
+                self.sendMsgToClient(client, {'type': 'PIPELINE_FINISHED', 'data': [{'nodeName': 'test', 'algorithmName': 'test', 'result': {'foo': 2}}]})
                 return False
             self.sendMsgToClient(client, {'type': 'RUN_ALGORTIHM', 'data': algos['order'][algos['current']]})
             algos['current']+=1

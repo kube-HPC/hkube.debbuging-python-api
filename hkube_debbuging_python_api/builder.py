@@ -29,4 +29,4 @@ class Builder():
     async def createPipeline(self, name):
         if not self.wsReady :
             await self.config()
-            return Pipeline().init(name)
+        return Pipeline(name, self.ws)

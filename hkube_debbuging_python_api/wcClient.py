@@ -1,42 +1,33 @@
 import websocket
 import simplejson as json
-from hkube_debbuging_python_api.algorithm import Algorithm
-from hkube_debbuging_python_api.pipeline import Pipeline
 from hkube_debbuging_python_api.consts import messages
+from hkube_debbuging_python_api.communication import Communication
 from events import Events
 import time
 
 
-class WebsocketClient:
+class WebsocketClient(Communication):
     def __init__(self):
-        self.events = Events()
+        self._events = Events()
         self._ws = None
         self._reconnectInterval = 5
         self._active = True
         self._switcher = {
-            messages.RUN_ALGORTIHM: self.runAlgorithm,
+            # messages.RUN_ALGORTIHM: self.runAlgorithm,
+            messages.RUN_ALGORTIHM: self._events.on_run_algorithm,
             messages.PIPELINE_CREATED: self.pipelineExecute,
             messages.PIPELINE_FINISHED: self.pipelineDone,
         }
-        self.algorithm = Algorithm()
-        self.pipeline = Pipeline()
-        self.algorithm.events.emit_algorithm_register += self.algorithmRegister
-        self.pipeline.events.emit_pipeline_create += self.pipelineCreate
+
+    @property
+    def events(self):
+        return self._events
 
     def algorithmRegister(self, data):
         self.send(messages.ALGORITHM_REGISTER, {"name": data["name"]})
 
-    def runAlgorithm(self, data):
-        result = None
-        try:
-            result = self.algorithm.runAlgorithm(data['algorithmName'], data)
-
-           # res = result == None if {} else result
-            self.send(messages.ALGORTIHM_FINISHED_SUCCESS, {
-                      "data": data, "result": result or {}})
-        except Exception:
-            self.send(messages.ALGORTIHM_FINISHED_FAILED, {
-                      "data": data, "result": result or {}})
+    def setAlgorithmResult(self, data, result):
+        self.send(messages.ALGORTIHM_FINISHED_SUCCESS, {"data": data, "result": result or {}})
 
     def pipelineCreate(self, data):
         self.send(messages.PIPELINE_CREATE, data)
@@ -46,14 +37,14 @@ class WebsocketClient:
 
     def pipelineDone(self, data):
         print('pipelineDone', data)
-        self.pipeline.done(data)
+        self._events.on_pipeline_done(data)
         self.stopWS()
 
     def stop(self, data):
-        self.events.on_stop(data)
+        self._events.on_stop(data)
 
     def exit(self, data):
-        self.events.on_exit(data)
+        self._events.on_exit(data)
 
     def on_message(self, message):
         decoded = json.loads(message)
@@ -69,10 +60,10 @@ class WebsocketClient:
         print(error)
 
     def on_close(self):
-        self.events.on_disconnect()
+        self._events.on_disconnect()
 
     def on_open(self):
-        self.events.on_connection()
+        self._events.on_connection()
 
     def send(self, type, message):
       #      print(f'sending message to worker: {type}')
