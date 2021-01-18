@@ -12,8 +12,8 @@ def pytest_report_collectionfinish(config, startdir, items):
     environ = {'PYTHONPATH': python_path}
     copyEnv = os.environ.copy()
     copyEnv.update(environ)
-    ws_server = subprocess.Popen(
-        ['python', 'tests/mocks/mock_ws_server.py'], env=copyEnv)
+    # ws_server = subprocess.Popen(['python', 'tests/mocks/mock_ws_server.py'], env=copyEnv)
+    ws_server = subprocess.Popen(['hkubectl', 'dry-run', 'start'], env=copyEnv)
 
 
 def pytest_configure(config):

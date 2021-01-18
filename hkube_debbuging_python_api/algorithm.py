@@ -1,43 +1,36 @@
 from events import Events
-from hkube_debbuging_python_api.singleton import Singleton
 
 
-class Algorithm(metaclass=Singleton):
-    def __init__(self):
+class Algorithm():
+    def __init__(self, pipline, name):
         self.events = Events()
-        self._pipelineInstance = None
-        self._registerAlgorithm = {}
-        self.instance = {}
+        self._pipeline = pipline
+        self._callback = None
+        self._algorithmName = name
+        self._nodeName = name
+        self._input=[]
 
-    def _clear(self):
-        self.instance = {}
-        self._registerAlgorithm = {}
-        self._pipelineInstance = None
 
-    def init(self, piplineInstance, name):
-        self._pipelineInstance = piplineInstance
-        self.instance = {"nodeName": name, "input": [], "algorithmName": name}
-        return self
-
-    def runAlgorithm(self, algorithm_name, data):
-        func = self._registerAlgorithm[algorithm_name]
+    def runAlgorithm(self, data):
+        func = self._callback
         if func:
-            func(data)
+            return func(data)
+        return None
 
     def input(self, data):
-        self.instance['input'].append(data)
+        self._input.append(data)
         return self
 
     def inputAsBatch(self, data):
-        self.instance.input.append('#'+data)
-
-    def inputArray(self, data):
-        self.instance = data
-        return self
+        self._input.append('#'+data)
 
     def add(self, callback):
-        self._pipelineInstance.pipeline['nodes'].append(self.instance)
-        self._registerAlgorithm[self.instance['algorithmName']] = callback
-        self.events.emit_algorithm_register(
-            {"name": self.instance['algorithmName']})
-        return self._pipelineInstance
+        instance={
+            'algorithmName': self._algorithmName,
+            'input': self._input,
+            'nodeName': self._nodeName
+        }
+        self._pipeline.pipeline['nodes'].append(instance)
+        self._callback = callback
+        self.events.emit_algorithm_register({"name": self._algorithmName})
+        return self._pipeline

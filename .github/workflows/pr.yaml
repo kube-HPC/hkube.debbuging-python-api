@@ -27,6 +27,12 @@ jobs:
         with:
           python-version: ${{ matrix.python-version }}
           architecture: x64
+      - name: download hkubectl
+        run: |
+          mkdir -p /tmp/hkubectl
+          curl -Lo /tmp/hkubectl/hkubectl https://github.com/kube-HPC/hkubectl/releases/latest/download/hkubectl-linux
+          chmod +x /tmp/hkubectl/hkubectl
+          echo /tmp/hkubectl >> $GITHUB_PATH 
       - run: ./scripts/test.sh
   coverage:
     runs-on: ubuntu-latest
@@ -37,6 +43,12 @@ jobs:
         with:
           python-version: '3.7'
           architecture: x64
+      - name: download hkubectl
+        run: |
+          mkdir -p /tmp/hkubectl
+          curl -Lo /tmp/hkubectl/hkubectl https://github.com/kube-HPC/hkubectl/releases/latest/download/hkubectl-linux
+          chmod +x /tmp/hkubectl/hkubectl
+          echo /tmp/hkubectl >> $GITHUB_PATH
       - run: ./scripts/coverage.sh
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
