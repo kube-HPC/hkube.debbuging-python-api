@@ -33,8 +33,7 @@ class Algorithm():
         func = self._callback
         if func:
             return func(data)
-        else:
-            raise Exception('No function was set in algorithm')
+        raise Exception('No function was set in algorithm')
 
     def input(self, data):
         self._input.append(data)
