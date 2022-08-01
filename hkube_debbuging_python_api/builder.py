@@ -25,7 +25,7 @@ class Builder():
         self.wsReady = True
         self.loop.call_soon_threadsafe(self.future.set_result, 4)
 
-    async def createPipeline(self, name, kind='batch'):
+    def createPipeline(self, name, kind='batch'):
         if not self.wsReady:
-            await self.config()
+            self.config()
         return Pipeline(name, self.ws, kind)

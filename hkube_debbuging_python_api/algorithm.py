@@ -12,10 +12,14 @@ class Algorithm():
         self._algorithmName = name
         self._nodeName = name
         self._input = []
-        self.hkube_api = hkube_api(pipline,self)
+        self.hkube_api = hkube_api(pipline, self)
         self.listeners = []
         self.error = None
 
+    def getNodeName(self):
+        return self._nodeName
+    def getAlgorithmName(self):
+        return self._algorithmName
 
     def runAlgorithm(self, data):
         func = self._callback
@@ -23,8 +27,6 @@ class Algorithm():
         if func:
             threading.Thread(target=func, args=(data, self.hkube_api)).start()
         return None
-
-
 
     def input(self, data):
         self._input.append(data)
@@ -54,7 +56,8 @@ class Algorithm():
             'input': self._input,
             'nodeName': self._nodeName
         }
-        def _invokeAlgorithm( msg, origin):
+
+        def _invokeAlgorithm(msg, origin):
             options = {}
             options.update(algorithm.options)
             options['streamInput'] = {'message': msg, 'origin': origin}
@@ -62,7 +65,7 @@ class Algorithm():
                 result = callback(options, algorithm.hkubeApi)
                 algorithm.hkubeApi.sendMessage(result)
             except Exception as e:
-                print ('statelessWrapper error, '+ str(e))
+                print('statelessWrapper error, ' + str(e))
                 algorithm.error = e
 
         def start(options, hkube_api):
@@ -75,8 +78,8 @@ class Algorithm():
                 if (algorithm.error is not None):
                     raise algorithm.error  # pylint: disable=raising-bad-type
                 time.sleep(1)
+
         self._pipeline.pipeline['nodes'].append(instance)
         self._callback = start
         self.events.emit_algorithm_register({"name": self._algorithmName})
-        return  self._pipeline
-
+        return self._pipeline

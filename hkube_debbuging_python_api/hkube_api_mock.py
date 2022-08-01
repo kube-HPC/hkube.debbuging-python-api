@@ -1,14 +1,11 @@
-
-
-
 class hkube_api:
-    def __init__(self, pipeline,algo):
+    def __init__(self, pipeline, algo):
         self.hasStartedListeningToMessages = False
         self.pipeline = pipeline
         self.currentAlgorithm = algo
 
     def registerInputListener(self, onMessage):
-        self.currentAlgorithm.listeners.append(onMessage);
+        self.currentAlgorithm.listeners.append(onMessage)
 
     def startMessageListening(self):
         self.hasStartedListeningToMessages = True
@@ -18,14 +15,14 @@ class hkube_api:
         if next is not None:
             nextAlgo = self.pipeline.getAlgorithm(next)
             for listener in nextAlgo.listeners:
-                listener(msg,self.currentAlgorithm._nodeName)
+                listener(msg, self.currentAlgorithm.getNodeName())
 
-    def _getNextNode(self,flowName):
+    def _getNextNode(self, flowName):
         if flowName is None:
             flowName = self.pipeline.getDefaultFlow()
         currentFlow = self.pipeline.getFlow(flowName).copy()
         for node in currentFlow:
-            if node['source'] == self.currentAlgorithm._algorithmName:
+            if node['source'] == self.currentAlgorithm.getAlgorithmName():
                 current = node
                 return current['next']
         return None
@@ -34,7 +31,7 @@ class hkube_api:
         pass
 
     def isListeningToMessages(self):
-        return True;
+        return True
 
     def get_streaming_statistics(self):
         return {"statisticsPerNode": [{"nodeName": "NextNodeName", "sent": -1, "queueSize": -1, "dropped": -1}], "binarySize": -1, "configuredMaxBinarySize": -1}

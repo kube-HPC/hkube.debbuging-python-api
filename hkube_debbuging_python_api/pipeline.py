@@ -29,7 +29,7 @@ class Pipeline():
         self._defaultFlowName = None
 
     def setFlows(self, flows):
-        self._flows = flows;
+        self._flows = flows
 
     def getFlow(self, name):
         return self._flows.get(name)

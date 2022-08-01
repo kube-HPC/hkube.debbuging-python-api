@@ -1,5 +1,6 @@
 from abc import abstractmethod
 
+
 class Communication:
     @property
     @abstractmethod
@@ -19,7 +20,7 @@ class Communication:
         pass
 
     @abstractmethod
-    def pipelineExecute(self,_):
+    def pipelineExecute(self, _):
         pass
 
     @abstractmethod
