@@ -73,4 +73,4 @@ def done(self, data):
 
 
 def _algorithmRegister(self, data):
-    self._communication.algorithmRegister(data)
+    self._communication.algorithmRegister(data)# pylint: disable=protected-access

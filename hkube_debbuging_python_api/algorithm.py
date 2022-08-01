@@ -1,7 +1,7 @@
 from events import Events
 import threading
 import time
-from hkube_debbuging_python_api.hkube_api_mock import hkube_api
+from hkube_debbuging_python_api.hkube_api_mock import hkube_api_mock
 
 
 class Algorithm():
@@ -12,12 +12,14 @@ class Algorithm():
         self._algorithmName = name
         self._nodeName = name
         self._input = []
-        self.hkube_api = hkube_api(pipline, self)
+        self.hkube_api = hkube_api_mock(pipline, self)
         self.listeners = []
         self.error = None
+        self.hkubeApi = None
 
     def getNodeName(self):
         return self._nodeName
+    
     def getAlgorithmName(self):
         return self._algorithmName
 
@@ -68,9 +70,9 @@ class Algorithm():
                 print('statelessWrapper error, ' + str(e))
                 algorithm.error = e
 
-        def start(options, hkube_api):
+        def start(options, hkubeApi):
             # pylint: disable=unused-argument
-            algorithm.hkubeApi = hkube_api
+            algorithm.hkubeApi = hkubeApi
             algorithm.hkubeApi.registerInputListener(onMessage=_invokeAlgorithm)
             algorithm.hkubeApi.startMessageListening()
             algorithm.options = options
