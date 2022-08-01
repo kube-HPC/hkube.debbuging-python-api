@@ -1,4 +1,7 @@
 from events import Events
+import threading
+import time
+from hkube_debbuging_python_api.hkube_api_mock import hkube_api
 
 
 class Algorithm():
@@ -8,29 +11,72 @@ class Algorithm():
         self._callback = None
         self._algorithmName = name
         self._nodeName = name
-        self._input=[]
+        self._input = []
+        self.hkube_api = hkube_api(pipline,self)
+        self.listeners = []
+        self.error = None
 
 
     def runAlgorithm(self, data):
         func = self._callback
+
         if func:
-            return func(data)
+            threading.Thread(target=func, args=(data, self.hkube_api)).start()
         return None
+
+
 
     def input(self, data):
         self._input.append(data)
         return self
 
     def inputAsBatch(self, data):
-        self._input.append('#'+data)
+        self._input.append('#' + data)
 
     def add(self, callback):
-        instance={
+        instance = {
             'algorithmName': self._algorithmName,
             'input': self._input,
             'nodeName': self._nodeName
         }
+        if callback.__code__.co_argcount == 1:
+            self._callback = lambda args, api: callback(args)
+        else:
+            self._callback = callback
         self._pipeline.pipeline['nodes'].append(instance)
-        self._callback = callback
         self.events.emit_algorithm_register({"name": self._algorithmName})
         return self._pipeline
+
+    def addAsStateless(self, callback):
+        algorithm = self
+        instance = {
+            'algorithmName': self._algorithmName,
+            'input': self._input,
+            'nodeName': self._nodeName
+        }
+        def _invokeAlgorithm( msg, origin):
+            options = {}
+            options.update(algorithm.options)
+            options['streamInput'] = {'message': msg, 'origin': origin}
+            try:
+                result = callback(options, algorithm.hkubeApi)
+                algorithm.hkubeApi.sendMessage(result)
+            except Exception as e:
+                print ('statelessWrapper error, '+ str(e))
+                algorithm.error = e
+
+        def start(options, hkube_api):
+            # pylint: disable=unused-argument
+            algorithm.hkubeApi = hkube_api
+            algorithm.hkubeApi.registerInputListener(onMessage=_invokeAlgorithm)
+            algorithm.hkubeApi.startMessageListening()
+            algorithm.options = options
+            while (True):
+                if (algorithm.error is not None):
+                    raise algorithm.error  # pylint: disable=raising-bad-type
+                time.sleep(1)
+        self._pipeline.pipeline['nodes'].append(instance)
+        self._callback = start
+        self.events.emit_algorithm_register({"name": self._algorithmName})
+        return  self._pipeline
+

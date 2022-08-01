@@ -7,9 +7,9 @@ import threading
 class Builder():
     def __init__(self):
         self.wsReady = False
-        self.loop=None
-        self.future=None
-        self.ws=None
+        self.loop = None
+        self.future = None
+        self.ws = None
 
     def config(self):
         self.loop = asyncio.get_running_loop()
@@ -25,7 +25,7 @@ class Builder():
         self.wsReady = True
         self.loop.call_soon_threadsafe(self.future.set_result, 4)
 
-    async def createPipeline(self, name):
-        if not self.wsReady :
+    async def createPipeline(self, name, kind='batch'):
+        if not self.wsReady:
             await self.config()
-        return Pipeline(name, self.ws)
+        return Pipeline(name, self.ws, kind)
