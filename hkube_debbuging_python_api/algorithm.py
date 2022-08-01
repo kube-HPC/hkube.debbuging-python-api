@@ -1,7 +1,7 @@
 from events import Events
 import threading
 import time
-from hkube_debbuging_python_api.hkube_api_mock import hkube_api_mock
+from hkube_debbuging_python_api.hkube_api_mock import hkube_api as hkube_api_mock
 
 
 class Algorithm():
@@ -16,19 +16,23 @@ class Algorithm():
         self.listeners = []
         self.error = None
         self.hkubeApi = None
+        self.options = None
 
     def getNodeName(self):
         return self._nodeName
-    
+
     def getAlgorithmName(self):
         return self._algorithmName
 
-    def runAlgorithm(self, data):
+    def runAlgorithmAsync(self, data):
         func = self._callback
-
         if func:
             threading.Thread(target=func, args=(data, self.hkube_api)).start()
-        return None
+
+    def runAlgorithm(self, data):
+        func = self._callback
+        if func:
+            return func(data)
 
     def input(self, data):
         self._input.append(data)

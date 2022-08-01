@@ -16,6 +16,7 @@ class Pipeline():
             "nodes": [],
             "flowInput": []
         }
+        self._kind = kind
         self.event = None
         self.loop = None
         self.future = None
@@ -52,7 +53,10 @@ class Pipeline():
 
     def _run_algorithm(self, data):
         algorithmName = data['algorithmName']
-        result = self.getAlgorithm(algorithmName).runAlgorithm(data)
+        if self._kind == 'stream':
+            self.getAlgorithm(algorithmName).runAlgorithmAsync(data)
+        else:
+            result = self.getAlgorithm(algorithmName).runAlgorithm(data)
         self._communication.setAlgorithmResult(data, result)
 
     def getAlgorithm(self, name):
