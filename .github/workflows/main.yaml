@@ -27,6 +27,13 @@ jobs:
         with:
           python-version: ${{ matrix.python-version }}
           architecture: x64
+      - name: download hkubectl
+        run: |
+          mkdir -p /tmp/hkubectl
+          curl -Lo /tmp/hkubectl/hkubectl https://github.com/kube-HPC/hkubectl/releases/latest/download/hkubectl-linux
+          chmod +x /tmp/hkubectl/hkubectl
+          echo /tmp/hkubectl >> $GITHUB_PATH 
+
       - run: ./scripts/test.sh
   coverage:
     if: "!contains(github.event.head_commit.message, '[skip ci]')"
