@@ -63,7 +63,7 @@ class Algorithm():
             'input': self._input,
             'nodeName': self._nodeName
         }
-
+        # OnMessage insert the message to streaminput in options the stateless gets and invoke the stateless
         def _invokeAlgorithm(msg, origin):
             options = {}
             options.update(algorithm.options)
