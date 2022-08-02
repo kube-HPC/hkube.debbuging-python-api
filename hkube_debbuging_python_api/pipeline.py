@@ -72,9 +72,9 @@ class Pipeline():
         return self.future
 
 
-def done(self, data):
-    self.loop.call_soon_threadsafe(self.future.set_result, data)
+    def done(self, data):
+        self.loop.call_soon_threadsafe(self.future.set_result, data)
 
 
-def _algorithmRegister(self, data):
-    self._communication.algorithmRegister(data)# pylint: disable=protected-access
+    def _algorithmRegister(self, data):
+        self._communication.algorithmRegister(data)# pylint: disable=protected-access
