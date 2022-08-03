@@ -66,7 +66,7 @@ class Pipeline():
         return FlowInput(self)
 
     def execute(self):
-        if self.kind == 'stream' and len(list(self._flows.keys())) == 0:
+        if self._kind == 'stream' and len(list(self._flows.keys())) == 0:
             raise Exception('No flows were defined for default flow')
         self._communication.pipelineCreate({fields.pipeline: self.pipeline})
         return self.future

@@ -32,7 +32,7 @@ class Algorithm():
     def runAlgorithm(self, data):
         func = self._callback
         if func:
-            return func(data)
+            return func(data, self.hkube_api)
         raise Exception('No function was set in algorithm')
 
     def input(self, data):

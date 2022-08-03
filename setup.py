@@ -10,7 +10,7 @@ packages = setuptools.find_packages()
 VERSION = '0.0.4'
 requires = [
     'Events>=0.3',
-    'websocket-client==1.3.3',
+    'websocket-client==0.53.0',
     'simplejson'
 ]
 
