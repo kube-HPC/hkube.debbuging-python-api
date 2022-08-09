@@ -8,6 +8,7 @@ import asyncio
 
 class Pipeline():
     def __init__(self, name, communication: Communication, kind='batch'):
+        self.active = True
         self.ws = None
         self.events = Events()
         self.pipeline = {
@@ -75,6 +76,8 @@ class Pipeline():
     def done(self, data):
         self.loop.call_soon_threadsafe(self.future.set_result, data)
 
+    def stop(self):
+        self.active = False
 
     def _algorithmRegister(self, data):
         self._communication.algorithmRegister(data)# pylint: disable=protected-access

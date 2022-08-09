@@ -81,7 +81,7 @@ class Algorithm():
             algorithm.hkubeApi.registerInputListener(onMessage=_invokeAlgorithm)
             algorithm.hkubeApi.startMessageListening()
             algorithm.options = options
-            while (True):
+            while (self._pipeline.active):
                 if (algorithm.error is not None):
                     raise algorithm.error  # pylint: disable=raising-bad-type
                 time.sleep(1)
