@@ -7,7 +7,7 @@ here = os.path.abspath(os.path.dirname(__file__))
 
 packages = setuptools.find_packages()
 
-VERSION = '0.0.4'
+VERSION = '0.0.5'
 requires = [
     'Events>=0.3',
     'websocket-client==0.53.0',
