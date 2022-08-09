@@ -8,6 +8,7 @@ import asyncio
 
 class Pipeline():
     def __init__(self, name, communication: Communication, kind='batch'):
+        self.active = True
         self.ws = None
         self.events = Events()
         self.pipeline = {
@@ -66,15 +67,17 @@ class Pipeline():
         return FlowInput(self)
 
     def execute(self):
-        if self.kind == 'stream' and len(list(self._flows.keys())) == 0:
+        if self._kind == 'stream' and len(list(self._flows.keys())) == 0:
             raise Exception('No flows were defined for default flow')
         self._communication.pipelineCreate({fields.pipeline: self.pipeline})
         return self.future
 
 
-def done(self, data):
-    self.loop.call_soon_threadsafe(self.future.set_result, data)
+    def done(self, data):
+        self.loop.call_soon_threadsafe(self.future.set_result, data)
 
+    def stop(self):
+        self.active = False
 
-def _algorithmRegister(self, data):
-    self._communication.algorithmRegister(data)# pylint: disable=protected-access
+    def _algorithmRegister(self, data):
+        self._communication.algorithmRegister(data)# pylint: disable=protected-access

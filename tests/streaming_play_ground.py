@@ -28,7 +28,6 @@ def test2(data, hkube_api):
     active = True
     while (active):
         time.sleep(10)
-    print('___')
     time.sleep(2)
     print(hkube_api.get_streaming_statistics())
     print('alg2')

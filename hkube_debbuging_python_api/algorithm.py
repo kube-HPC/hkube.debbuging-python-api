@@ -32,7 +32,7 @@ class Algorithm():
     def runAlgorithm(self, data):
         func = self._callback
         if func:
-            return func(data)
+            return func(data, self.hkube_api)
         raise Exception('No function was set in algorithm')
 
     def input(self, data):
@@ -63,7 +63,7 @@ class Algorithm():
             'input': self._input,
             'nodeName': self._nodeName
         }
-
+        # OnMessage insert the message to streaminput in options the stateless gets and invoke the stateless
         def _invokeAlgorithm(msg, origin):
             options = {}
             options.update(algorithm.options)
@@ -81,7 +81,7 @@ class Algorithm():
             algorithm.hkubeApi.registerInputListener(onMessage=_invokeAlgorithm)
             algorithm.hkubeApi.startMessageListening()
             algorithm.options = options
-            while (True):
+            while (self._pipeline.active):
                 if (algorithm.error is not None):
                     raise algorithm.error  # pylint: disable=raising-bad-type
                 time.sleep(1)
