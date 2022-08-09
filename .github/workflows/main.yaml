@@ -45,7 +45,7 @@ jobs:
         with:
           python-version: '3.7'
           architecture: x64
-      - run: ./tools/ci/coverage.sh
+      - run: ./scripts/coverage.sh
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
   deploy:
@@ -61,7 +61,7 @@ jobs:
         with:
           python-version: '3.7'
           architecture: x64
-      - run: ./tools/ci/github.sh
+      - run: ./scripts/github.sh
         env:
           GH_TOKEN: '${{ secrets.GH_TOKEN }}'
       - name: Publish a Python distribution to PyPI
